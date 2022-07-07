@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-# -------------------------------------------------------------------------- common variables
+if [ "$(uname)" != 'Linux' ]; then
+	echo "unsupported platform!"
+	exit 0
+fi
 
-platform='unknown'
-distro='unknown'
-
-# -------------------------------------------------------------------------- common functions
+# -------------------------------------------------------------------------- common
 
 quiet_git() {
 	stdout=$(mktemp)
@@ -21,29 +21,10 @@ quiet_git() {
 	rm -f "$stdout" "$stderr"
 }
 
-# -------------------------------------------------------------------------- find current platform and distribution
-
-if [ "$(uname)" = 'Linux' ]; then
-	platform='Linux'
-	if type lsb_release >/dev/null 2>&1; then
-		distro="$(lsb_release -si)"
-	elif [ -f "/etc/fedora-release" ]; then
-		distro='Fedora'
-	elif [ -f "/etc/arch-release" ]; then
-		distro='Arch'
-	else
-		echo "unsupported distribution!"
-		exit 0
-	fi
-elif [ "$(uname)" = 'Darwin' ]; then
-	platform='Mac'
-else
-	echo "unsupported platform!"
-	exit 0
-fi
-echo -e "$platform platform with $distro distribution\n"
-
 # -------------------------------------------------------------------------- install dependencies
+
+# 
+distro=$(grep '^ID' /etc/os-release | awk -F  "=" '{print $2}')
 
 dependencies="
 git \
@@ -57,30 +38,18 @@ python3-neovim \
 "
 
 echo "Installing dependencies ..."
-if [ "$platform" = 'Linux' ]; then
-	if [ "$distro" = 'Ubuntu' ] || [ "$distro" = 'Debian' ]; then
-		sudo apt-get -qq update
-		for dependency in $dependencies; do
-			sudo apt-get -qq install -y "$dependency"
-		done
-	elif [ "$distro" = 'Arch' ]; then
-		for dependency in $dependencies; do
-			sudo pacman -q -S --noconfirm "$dependency" 1>/dev/null
-		done
-	elif [ "$distro" = 'Fedora' ]; then
-		for dependency in $dependencies; do
-			sudo dnf -y -q install "$dependency"
-		done
-	fi
-elif [ $platform = 'Mac' ]; then
-	if ! type "$(which brew)"; then
-		echo "Brew not installed. Installing Brew ..."
-		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	fi
-
-	echo "Installing dependencies with Brew ..."
-	for d in $dependencies; do
-		brew info "$d" | grep --quiet 'Not installed' && brew install "$d"
+if [ "$distro" = 'ubuntu' ] || [ "$distro" = 'debian' ]; then
+	sudo apt-get -qq update
+	for dependency in $dependencies; do
+		sudo apt-get -qq install -y "$dependency"
+	done
+elif [ "$distro" = 'fedora' ]; then
+	for dependency in $dependencies; do
+		sudo dnf -y -q install "$dependency"
+	done
+elif [ "$distro" = 'arch' ]; then
+	for dependency in $dependencies; do
+		sudo pacman -q -S --noconfirm "$dependency" 1>/dev/null
 	done
 fi
 echo -e "Done\n"
@@ -89,11 +58,7 @@ echo -e "Done\n"
 
 echo "Installing Oh My Zsh ..."
 quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-if [ $platform = 'Linux' ]; then
-	sudo chsh -s "$(which zsh)" "$(whoami)"
-elif [ $platform = 'Mac' ]; then
-	sudo dscl . -create /Users/$USER UserShell "$(which zsh)"
-fi
+sudo chsh -s "$(which zsh)" "$(whoami)"
 echo -e "Done\n"
 
 # -------------------------------------------------------------------------- dotfiles
@@ -144,24 +109,18 @@ echo -e "Done\n"
 
 # -------------------------------------------------------------------------- install nord theme for gnome terminal
 
-if [ "$platform" = 'Linux' ] && [xhost >/dev/null 2>&1]; then # also check if running desktop or headless
+if xhost >/dev/null 2>&1; then # check if running desktop or headless
 	echo "Installing Nord theme for Gnome Terminal..."
 	curl -sO https://raw.githubusercontent.com/arcticicestudio/nord-gnome-terminal/develop/src/nord.sh && chmod +x nord.sh && ./nord.sh
 	rm -f nord.sh
-	echo -e "Done\n"
-elif [ "$platform" = 'Mac' ] && [ "${TERM_PROGRAM}" = "iTerm.app" ]; then
-	echo "Downloading & Installing Nord theme for iTerm"
-	temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-	wget -q -O "$temp_dir/Nord.itermcolors" https://raw.githubusercontent.com/arcticicestudio/nord-iterm2/master/src/xml/Nord.itermcolors
-	open "$temp_dir/Nord.itermcolors"
 	echo -e "Done\n"
 fi
 
 # -------------------------------------------------------------------------- install powerline fonts
 
 echo "Installing Powerline fonts ..."
-quiet_git clone https://github.com/powerline/fonts.git --depth=1
-cd fonts && ./install.sh && cd .. && rm -rf fonts
+quiet_git clone https://github.com/powerline/fonts.git --depth=1 &&
+	cd fonts && ./install.sh && cd .. && rm -rf fonts
 echo -e "Done\n"
 
 # -------------------------------------------------------------------------- installation complete
