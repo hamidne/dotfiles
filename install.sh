@@ -1,7 +1,12 @@
 #!/bin/bash
 set -e
 
-# -------------------------------------------------------------------------- make git clone be quiet
+# -------------------------------------------------------------------------- common variables
+
+platform='unknown'
+distro='unknown'
+
+# -------------------------------------------------------------------------- common functions
 
 quiet_git() {
 	stdout=$(mktemp)
@@ -69,14 +74,11 @@ if [ "$platform" = 'Linux' ]; then
 	fi
 elif [ $platform = 'Mac' ]; then
 	if ! type "$(which brew)"; then
-		echo "Brew not installed. Installing ..."
+		echo "Brew not installed. Installing Brew ..."
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	else
-		echo "Brew already installed. Proceeding ..."
-		echo
 	fi
-	echo "Installing dependencies with Brew"
-	echo
+
+	echo "Installing dependencies with Brew ..."
 	for d in $dependencies; do
 		brew info "$d" | grep --quiet 'Not installed' && brew install "$d"
 	done
@@ -96,12 +98,12 @@ echo -e "Done\n"
 
 # -------------------------------------------------------------------------- dotfiles
 
-echo "Installing dotfiles into $dotfiles_dir ..."
-dotfiles_dir="$HOME/.dotfiles"
+echo "Installing dotfiles"
+dotfiles_dir="tmp/dotfiles"
 quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
-mv "$dotfiles_dir/.zshrc" "$HOME"
-mv "$dotfiles_dir/.tmux.conf" "$HOME"
-mv "$dotfiles_dir/init.vim" "$HOME/.config/nvim"
+mv "$dotfiles_dir/configs/.zshrc" "$HOME"
+mv "$dotfiles_dir/configs/.tmux.conf" "$HOME"
+mv "$dotfiles_dir/configs/init.vim" "$HOME/.config/nvim"
 rm -rf "$dotfiles_dir"
 echo -e "Done\n"
 
