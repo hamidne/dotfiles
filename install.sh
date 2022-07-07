@@ -109,22 +109,22 @@ elif [ $platform = 'Mac' ]; then
 fi
 echo -e "Done\n"
 
-# oh my zsh
-echo "Installing Oh My Zsh..."
-printf "${NORMAL}"
-# Work around to non-standard shell error when chsh in oh-my-zsh script
+# -------------------------------------------------------------------------- Oh My Zsh
+
+echo "Installing Oh My Zsh ..."
 quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 if [ $platform = 'Linux' ]; then
 	sudo chsh -s "$(which zsh)" "$(whoami)"
 elif [ $platform = 'Mac' ]; then
 	sudo dscl . -create /Users/$USER UserShell "$(which zsh)"
 fi
-printf "${PURPLE}"
-echo "Done"
-echo
+echo -e "Done\n"
+
+
 # install dotfiles
 install_dotfiles
 echo
+
 #  zsh plugins
 echo "Installing Zsh plugins..."
 quiet_git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
@@ -170,16 +170,16 @@ elif [ "$platform" = 'Mac' ]; then
 	wget -q -O "$temp_dir/Nord.itermcolors" https://raw.githubusercontent.com/arcticicestudio/nord-iterm2/master/src/xml/Nord.itermcolors
 	echo "Done"
 fi
-printf "${PURPLE}"
+
+
 echo
 echo "Installing Powerline fonts..."
-printf "${NORMAL}"
+
 quiet_git clone https://github.com/powerline/fonts.git --depth=1 &&
 	cd fonts &&
 	./install.sh &&
 	cd .. &&
 	rm -rf fonts
-printf "${PURPLE}"
 echo "Done"
 echo
 if [ "$platform" = 'Mac' ] && [ "${TERM_PROGRAM}" = "iTerm.app" ]; then
@@ -187,7 +187,6 @@ if [ "$platform" = 'Mac' ] && [ "${TERM_PROGRAM}" = "iTerm.app" ]; then
 	open "$temp_dir/Nord.itermcolors"
 fi
 echo
-printf "${BLUE}"
 echo '****************************************************************************************************'
 echo '    _            __        ____      __  _                                           __     __     '
 echo '   (_)___  _____/ /_____ _/ / /___ _/ /_(_)___  ____     _________  ____ ___  ____  / /__  / /____ '

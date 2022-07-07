@@ -1,6 +1,20 @@
 #!/bin/bash
 
-distro_ver="$(cat /etc/fedora-release | tr -dc '0-9.' | cut -d \. -f1).$(cat /etc/fedora-release | tr -dc '0-9.' | cut -d \. -f2)"
+# make git be quiet
+quiet_git() {
+	stdout=$(mktemp)
+	stderr=$(mktemp)
 
+	if ! git "$@" </dev/null >"$stdout" 2>"$stderr"; then
+		cat "$stderr" >&2
+		rm -f "$stdout" "$stderr"
+		exit 1
+	fi
 
-echo -e "var1\n=$distro_ver"
+	rm -f "$stdout" "$stderr"
+}
+
+dotfiles_dir="$HOME/.dotfiles"                                         # dotfiles directory
+dotfiles_repo="https://github.com/aaronkjones/noobs-term-dotfiles.git" # dotfiles repo
+
+quiet_git clone "$dotfiles_repo" "$dotfiles_dir"
