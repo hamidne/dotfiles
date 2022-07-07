@@ -24,6 +24,8 @@ plugins=(
   zsh-completions # More completions
   zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
   colored-man-pages # Self-explanatory
+  docker # docker auto-completions
+  kubectl # kubernetes auto-completions
   )
 autoload -U compinit && compinit # reload completions for zsh-completions
 

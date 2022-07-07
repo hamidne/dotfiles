@@ -23,7 +23,7 @@ quiet_git() {
 
 # -------------------------------------------------------------------------- install dependencies
 
-# 
+# get linux distribution
 distro=$(grep '^ID' /etc/os-release | awk -F  "=" '{print $2}')
 
 dependencies="
@@ -140,9 +140,5 @@ echo ''
 echo ''
 echo '      * Press Ctrl + a, then I to load Tmux plugins'
 echo ''
-if [ "$platform" = 'Linux' ]; then
-	echo '      * In Gnome Terminal preferences, set Nord as your default profile'
-elif [ "$platform" = 'Mac' ]; then
-	echo '      * In iTerm, set your color profile to Nord'
-fi
+echo '      * In Gnome Terminal preferences, set Nord as your default profile'
 echo ''
