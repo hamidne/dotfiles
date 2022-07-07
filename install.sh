@@ -1,18 +1,8 @@
 #!/bin/bash
 set -e
 
-# Set foreground colors
-number_of_colors=$(tput colors)
-if [ -t 1 ] && [ -n "$number_of_colors" ] && [ "$number_of_colors" -ge 8 ]; then
-	read -r BLUE PURPLE NORMAL <<< "$(tput setaf 4) $(tput setaf 5) $(tput sgr0)"
-fi
+# -------------------------------------------------------------------------- make git clone be quiet
 
-dotfiles_dir="$HOME/.dotfiles"                             # dotfiles directory
-dotfiles_repo="https://github.com/mohammadne/dotfiles.git" # dotfiles repo
-nvim_config="$HOME/.config/nvim/init.vim"                  # neovim config location
-platform="unknown"                                         # default to unknown platform
-
-# make git be quiet
 quiet_git() {
 	stdout=$(mktemp)
 	stderr=$(mktemp)
@@ -26,25 +16,8 @@ quiet_git() {
 	rm -f "$stdout" "$stderr"
 }
 
-# install dotfiles
-install_dotfiles() {
-	echo "Installing dotfiles into $dotfiles_dir..."
-	quiet_git clone "$dotfiles_repo" "$dotfiles_dir"
-	echo "Symbollically linking dotfiles to home directory (e.g. ln -s $dotfiles_dir/.zshrc $HOME/.zshrc)"
-	find "$dotfiles_dir" -type f -name ".*" -exec ln -sf {} "$HOME" \; >/dev/null 2>&1
-	if [ ! -d "$HOME/.config/nvim" ]; then
-		mkdir -p "$HOME/.config/nvim"
-	fi
-	ln -s "$dotfiles_dir/init.vim" "$nvim_config"
-}
+# -------------------------------------------------------------------------- find current platform and distribution
 
-# backup and remove dotfiles
-if [ -d "$dotfiles_dir" ]; then
-	echo "Old dotfiles exist"
-	exit 0
-fi
-
-# find current platform and distribution
 if [ "$(uname)" = 'Linux' ]; then
 	platform='Linux'
 	if type lsb_release >/dev/null 2>&1; then
@@ -63,8 +36,9 @@ else
 	echo "unsupported platform!"
 	exit 0
 fi
-
 echo -e "$platform platform with $distro distribution\n"
+
+# -------------------------------------------------------------------------- install dependencies
 
 dependencies="
 git \
@@ -120,73 +94,76 @@ elif [ $platform = 'Mac' ]; then
 fi
 echo -e "Done\n"
 
+# -------------------------------------------------------------------------- dotfiles
 
-# install dotfiles
-install_dotfiles
-echo
+echo "Installing dotfiles into $dotfiles_dir ..."
+dotfiles_dir="$HOME/.dotfiles"
+quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
+mv "$dotfiles_dir/.zshrc" "$HOME"
+mv "$dotfiles_dir/.tmux.conf" "$HOME"
+mv "$dotfiles_dir/init.vim" "$HOME/.config/nvim"
+rm -rf "$dotfiles_dir"
+echo -e "Done\n"
 
-#  zsh plugins
-echo "Installing Zsh plugins..."
+# --------------------------------------------------------------------------  zsh plugins
+
+echo "Installing Zsh plugins ..."
 quiet_git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 quiet_git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 quiet_git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search"
 quiet_git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
-echo "Done"
-echo
-# tmux package manager
-echo "Installing Tmux package manager into $HOME/.tmux..."
+echo -e "Done\n"
+
+# -------------------------------------------------------------------------- tmux package manager
+
+echo "Installing Tmux package manager ..."
 quiet_git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-echo "Done"
-echo
-# vim-plug plugin manager
-echo "Installing Vim-plug plugin manager into $HOME/.local/share/nvim/site/autoload/plug.vim..."
+echo -e "Done\n"
+
+# -------------------------------------------------------------------------- vim-plug plugin manager
+
+echo "Installing Vim-plug plugin manager ..."
 curl -sfLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-echo "Done"
-echo
-# activate nvim plugins
-echo "Activating Neovim plugins..."
+echo -e "Done\n"
+
+# -------------------------------------------------------------------------- activate nvim plugins
+
+echo "Activating Neovim plugins ..."
 mkdir -p "$HOME/.config/nvim"
 nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins. Check init.vim for errors and try again."
-echo "Done"
-echo
-# install spaceship-prompt theme for zsh
-echo "Installing Spaceship-prompt theme for Zsh..."
+echo -e "Done\n"
+
+# -------------------------------------------------------------------------- install spaceship-prompt theme for zsh
+
+echo "Installing Spaceship-prompt theme for Zsh ..."
 quiet_git clone https://github.com/denysdovhan/spaceship-prompt.git "$HOME/.oh-my-zsh/themes/spaceship-prompt"
 ln -s "$HOME/.oh-my-zsh/themes/spaceship-prompt/spaceship.zsh-theme" "$HOME/.oh-my-zsh/themes/spaceship.zsh-theme"
-echo "Done"
-echo
-# install nord theme for gnome terminal
-if [ "$platform" = 'Linux' ]; then
-	# check if running desktop or headless
-	if xhost >/dev/null 2>&1; then
-		echo "Installing Nord theme for Gnome Terminal..."
-		curl -sO https://raw.githubusercontent.com/arcticicestudio/nord-gnome-terminal/develop/src/nord.sh && chmod +x nord.sh && ./nord.sh
-		rm -f nord.sh
-		echo "Done"
-	fi
-elif [ "$platform" = 'Mac' ]; then
-	echo "Downloading Nord theme for iTerm"
+echo -e "Done\n"
+
+# -------------------------------------------------------------------------- install nord theme for gnome terminal
+
+if [ "$platform" = 'Linux' ] && [xhost >/dev/null 2>&1]; then # also check if running desktop or headless
+	echo "Installing Nord theme for Gnome Terminal..."
+	curl -sO https://raw.githubusercontent.com/arcticicestudio/nord-gnome-terminal/develop/src/nord.sh && chmod +x nord.sh && ./nord.sh
+	rm -f nord.sh
+	echo -e "Done\n"
+elif [ "$platform" = 'Mac' ] && [ "${TERM_PROGRAM}" = "iTerm.app" ]; then
+	echo "Downloading & Installing Nord theme for iTerm"
 	temp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 	wget -q -O "$temp_dir/Nord.itermcolors" https://raw.githubusercontent.com/arcticicestudio/nord-iterm2/master/src/xml/Nord.itermcolors
-	echo "Done"
-fi
-
-
-echo
-echo "Installing Powerline fonts..."
-
-quiet_git clone https://github.com/powerline/fonts.git --depth=1 &&
-	cd fonts &&
-	./install.sh &&
-	cd .. &&
-	rm -rf fonts
-echo "Done"
-echo
-if [ "$platform" = 'Mac' ] && [ "${TERM_PROGRAM}" = "iTerm.app" ]; then
-	echo 'Installing Nord theme for iTerm...'
 	open "$temp_dir/Nord.itermcolors"
+	echo -e "Done\n"
 fi
-echo
+
+# -------------------------------------------------------------------------- install powerline fonts
+
+echo "Installing Powerline fonts ..."
+quiet_git clone https://github.com/powerline/fonts.git --depth=1
+cd fonts && ./install.sh && cd .. && rm -rf fonts
+echo -e "Done\n"
+
+# -------------------------------------------------------------------------- installation complete
+
 echo '****************************************************************************************************'
 echo '    _            __        ____      __  _                                           __     __     '
 echo '   (_)___  _____/ /_____ _/ / /___ _/ /_(_)___  ____     _________  ____ ___  ____  / /__  / /____ '
@@ -207,7 +184,4 @@ if [ "$platform" = 'Linux' ]; then
 elif [ "$platform" = 'Mac' ]; then
 	echo '      * In iTerm, set your color profile to Nord'
 fi
-echo ''
-echo '      * Set an appropriate font (e.g. Inconsolata for Powerline)'
-echo ''
 echo ''
