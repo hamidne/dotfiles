@@ -1,41 +1,16 @@
 #!/bin/bash
 set -e
 
-# colors
-if which tput >/dev/null 2>&1; then
-	ncolors=$(tput colors)
-fi
-if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-	BLUE="$(tput setaf 4)"
-	PURP="$(tput setaf 5)"
-	NORMAL="$(tput sgr0)"
-else
-	BLUE=""
-	PURP=""
-	NORMAL=""
+# Set foreground colors
+number_of_colors=$(tput colors)
+if [ -t 1 ] && [ -n "$number_of_colors" ] && [ "$number_of_colors" -ge 8 ]; then
+	read -r BLUE PURPLE NORMAL <<< "$(tput setaf 4) $(tput setaf 5) $(tput sgr0)"
 fi
 
-# dotfiles
-dotfiles=".tmux.conf \
-.zshrc \
-.tmux \
-.zsh \
-.oh-my-zsh \
-"
-
-# package dependencies
-dependencies="git \
-curl \
-wget \
-zsh \
-tmux \
-neovim \
-"
-
-dotfiles_dir="$HOME/.dotfiles"                                         # dotfiles directory
-dotfiles_repo="https://github.com/aaronkjones/noobs-term-dotfiles.git" # dotfiles repo
-nvim_config="$HOME/.config/nvim/init.vim"                              # neovim config location
-platform="unknown"                                                     # default to unknown platform
+dotfiles_dir="$HOME/.dotfiles"                             # dotfiles directory
+dotfiles_repo="https://github.com/mohammadne/dotfiles.git" # dotfiles repo
+nvim_config="$HOME/.config/nvim/init.vim"                  # neovim config location
+platform="unknown"                                         # default to unknown platform
 
 # make git be quiet
 quiet_git() {
@@ -49,30 +24,6 @@ quiet_git() {
 	fi
 
 	rm -f "$stdout" "$stderr"
-}
-printf "${PURP}"
-# backup dotfiles
-backup_dotfiles() {
-	echo "Backing up old dotfiles..."
-	for d in $dotfiles; do
-		cp -rf "$HOME/$d" "$HOME/$d.backup" 2>/dev/null || :
-	done
-	cp -rf "$dotfiles_dir" "$dotfiles_dir.backup" 2>/dev/null || :
-	cp -f "$nvim_config" "$HOME/.config/nvim/init.vim.backup" 2>/dev/null || :
-	cp -rf "$HOME/.oh-my-zsh" "$HOME/.oh-my-zsh.backup" 2>/dev/null || :
-	echo "Done"
-}
-
-# remove dotfiles
-remove_old_dotfiles() {
-	echo "Removing old dotfiles..."
-	for d in $dotfiles; do
-		rm -rf "${HOME:?}"/"$d"
-	done
-	rm -rf "$dotfiles_dir"
-	rm -f "$nvim_config"
-	rm -rf "$HOME/.oh-my-zsh"
-	echo "Done"
 }
 
 # install dotfiles
@@ -90,97 +41,64 @@ install_dotfiles() {
 # backup and remove dotfiles
 if [ -d "$dotfiles_dir" ]; then
 	echo "Old dotfiles exist"
-	echo
-	backup_dotfiles
-	echo
-	remove_old_dotfiles
-	echo
+	exit 0
 fi
+
 # find current platform and distribution
 if [ "$(uname)" = 'Linux' ]; then
 	platform='Linux'
 	if type lsb_release >/dev/null 2>&1; then
 		distro="$(lsb_release -si)"
-		distro_ver="$(lsb_release -r -s)"
+	elif [ -f "/etc/fedora-release" ]; then
+		distro='Fedora'
 	elif [ -f "/etc/arch-release" ]; then
 		distro='Arch'
-	elif [ -f "/etc/centos-release" ]; then
-		distro='CentOS'
-		distro_ver="$(cat /etc/centos-release | tr -dc '0-9.' | cut -d \. -f1).$(cat /etc/centos-release | tr -dc '0-9.' | cut -d \. -f2)"
+	else
+		echo "unsupported distribution!"
+		exit 0
 	fi
 elif [ "$(uname)" = 'Darwin' ]; then
 	platform='Mac'
-fi
-echo "Current platform: $platform"
-if [ "$platform" = 'Linux' ]; then
-	echo "Current distribution version: $distro_ver"
-	echo "Current distribution: $distro"
-fi
-echo
-# add neovim repo
-if [ "$distro" = 'Ubuntu' ]; then
-	if ! command -v nvim; then
-		echo "Adding Neovim Repository..."
-		if [ "$distro_ver" = "16.04" ] || [ "$distro_ver" = "18.04" ]; then
-			/usr/bin/sudo apt-add-repository ppa:neovim-ppa/stable -y 1>/dev/null
-		else
-			/usr/bin/sudo apt-add-repository ppa:neovim-ppa/unstable -y 1>/dev/null
-			echo "Done"
-		fi
-	fi
-elif [ "$distro" = 'CentOS' ]; then
-	/usr/bin/sudo yum -y -q install epel-release
-	/usr/bin/sudo curl -o /etc/yum.repos.d/dperson-neovim-epel-7.repo https://copr.fedorainfracloud.org/coprs/dperson/neovim/repo/epel-7/dperson-neovim-epel-7.repo
-	/usr/bin/sudo yum -y -q install neovim --enablerepo=epel
+else
+	echo "unsupported platform!"
+	exit 0
 fi
 
-echo
-# install dependencies
-# linux
-echo "Installing dependencies..."
+echo -e "$platform platform with $distro distribution\n"
+
+dependencies="
+git \
+curl \
+wget \
+chsh \
+zsh \
+tmux \
+neovim \
+python3-neovim \
+"
+
+echo "Installing dependencies ..."
 if [ "$platform" = 'Linux' ]; then
-	if [ "$distro" = 'Ubuntu' ] || [ "$distro" = 'Raspbian' ]; then
-		/usr/bin/sudo apt-get -qq update
-		for p in $dependencies; do
-			/usr/bin/sudo apt-get -qq install -y "$p"
+	if [ "$distro" = 'Ubuntu' ] || [ "$distro" = 'Debian' ]; then
+		sudo apt-get -qq update
+		for dependency in $dependencies; do
+			sudo apt-get -qq install -y "$dependency"
 		done
 	elif [ "$distro" = 'Arch' ]; then
-		for p in $dependencies; do
-			/usr/bin/sudo pacman -q -S --noconfirm "$p" 1>/dev/null
+		for dependency in $dependencies; do
+			sudo pacman -q -S --noconfirm "$dependency" 1>/dev/null
 		done
-	elif [ "$distro" = 'CentOS' ]; then
-		for p in $dependencies; do
-			/usr/bin/sudo yum -y -q install "$p"
+	elif [ "$distro" = 'Fedora' ]; then
+		for dependency in $dependencies; do
+			sudo dnf -y -q install "$dependency"
 		done
-			/usr/bin/sudo yum -y -q install gcc kernel-devel make ncurses-devel
-			curl -s -OL https://github.com/libevent/libevent/releases/download/release-2.1.11-stable/libevent-2.1.11-stable.tar.gz > /dev/null && \
-			tar -xzf libevent-2.1.11-stable.tar.gz && \
-			cd libevent-2.1.11-stable && \
-			./configure --prefix=/usr/local > /dev/null && \
-			make > /dev/null 2>&1 && \
-			sudo make install > /dev/null && \
-			(cd .. || exit) && \
-			curl -s -OL https://github.com/tmux/tmux/releases/download/2.9a/tmux-2.9a.tar.gz > /dev/null && \
-			tar -xzf tmux-2.9a.tar.gz && \
-			cd tmux-2.9a && \
-			LDFLAGS="-L/usr/local/lib -Wl,-rpath=/usr/local/lib" ./configure --prefix=/usr/local > /dev/null && \
-			make > /dev/null 2>&1 && \
-			sudo make install > /dev/null 2>&1 && \
-			(cd .. || exit) && \
-			wget --quiet https://sourceforge.net/projects/zsh/files/zsh/5.7.1/zsh-5.7.1.tar.xz > /dev/null && \
-			tar xf zsh-5.7.1.tar.xz && \
-			cd zsh-5.7.1 && \
-			./configure > /dev/null && \
-			make > /dev/null 2>&1 && \
-			sudo make install > /dev/null 2>&1
 	fi
-	# mac
 elif [ $platform = 'Mac' ]; then
 	if ! type "$(which brew)"; then
-		echo "Brew not installed. Installing..."
+		echo "Brew not installed. Installing ..."
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	else
-		echo "Brew already installed. Proceeding..."
+		echo "Brew already installed. Proceeding ..."
 		echo
 	fi
 	echo "Installing dependencies with Brew"
@@ -189,19 +107,19 @@ elif [ $platform = 'Mac' ]; then
 		brew info "$d" | grep --quiet 'Not installed' && brew install "$d"
 	done
 fi
-echo "Done"
-echo
+echo -e "Done\n"
+
 # oh my zsh
 echo "Installing Oh My Zsh..."
 printf "${NORMAL}"
 # Work around to non-standard shell error when chsh in oh-my-zsh script
 quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-if [ $platform = 'Mac' ]; then
-	sudo dscl . -create /Users/$USER UserShell "$(which zsh)"
-elif [ $platform = 'Linux' ]; then
+if [ $platform = 'Linux' ]; then
 	sudo chsh -s "$(which zsh)" "$(whoami)"
+elif [ $platform = 'Mac' ]; then
+	sudo dscl . -create /Users/$USER UserShell "$(which zsh)"
 fi
-printf "${PURP}"
+printf "${PURPLE}"
 echo "Done"
 echo
 # install dotfiles
@@ -252,7 +170,7 @@ elif [ "$platform" = 'Mac' ]; then
 	wget -q -O "$temp_dir/Nord.itermcolors" https://raw.githubusercontent.com/arcticicestudio/nord-iterm2/master/src/xml/Nord.itermcolors
 	echo "Done"
 fi
-printf "${PURP}"
+printf "${PURPLE}"
 echo
 echo "Installing Powerline fonts..."
 printf "${NORMAL}"
@@ -261,7 +179,7 @@ quiet_git clone https://github.com/powerline/fonts.git --depth=1 &&
 	./install.sh &&
 	cd .. &&
 	rm -rf fonts
-printf "${PURP}"
+printf "${PURPLE}"
 echo "Done"
 echo
 if [ "$platform" = 'Mac' ] && [ "${TERM_PROGRAM}" = "iTerm.app" ]; then
