@@ -66,9 +66,15 @@ echo -e "Done\n"
 echo "Installing dotfiles"
 dotfiles_dir="tmp/dotfiles"
 quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
+
 mv "$dotfiles_dir/configs/.zshrc" "$HOME"
+
 mv "$dotfiles_dir/configs/.tmux.conf" "$HOME"
+
+# make sure nvim directory exists
+mkdir -p "$HOME/.config/nvim"
 mv "$dotfiles_dir/configs/init.vim" "$HOME/.config/nvim"
+
 rm -rf "$dotfiles_dir"
 echo -e "Done\n"
 
@@ -96,7 +102,6 @@ echo -e "Done\n"
 # -------------------------------------------------------------------------- activate nvim plugins
 
 echo "Activating Neovim plugins ..."
-mkdir -p "$HOME/.config/nvim"
 nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins. Check init.vim for errors and try again."
 echo -e "Done\n"
 
