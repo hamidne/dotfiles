@@ -30,7 +30,6 @@ dependencies="
 git \
 curl \
 wget \
-chsh \
 zsh \
 tmux \
 neovim \
@@ -65,7 +64,7 @@ fi
 
 echo "Installing Oh My Zsh ..."
 quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-sudo chsh -s "$(which zsh)" "$(whoami)"
+sudo usermod --shell "$(which zsh)" "$(whoami)"
 echo -e "Done\n"
 
 # -------------------------------------------------------------------------- dotfiles
