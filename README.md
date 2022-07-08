@@ -5,7 +5,7 @@
 ## Overview
 
 ![Cover preview](assets/terminal.png)  
-Noobs Term is an installer that incorporates some of the wonderful terminal programs, packages, and configurations that are commonly installed together.
+An installer that incorporates some of the wonderful terminal programs, packages, and configurations that are commonly installed together.
 
 ## What's Included
 
