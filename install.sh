@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
+# exit on non-linux platforms.
 if [ "$(uname)" != 'Linux' ]; then
 	echo "unsupported platform!"
 	exit 0
 fi
 
-# -------------------------------------------------------------------------- common
 
 quiet_git() {
 	stdout=$(mktemp)
