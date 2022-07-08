@@ -24,7 +24,7 @@ quiet_git() {
 # -------------------------------------------------------------------------- install dependencies
 
 # get linux distribution
-distro=$(grep '^ID' /etc/os-release | awk -F  "=" '{print $2}')
+distro=$(grep '^ID=' /etc/os-release | awk -F  "=" '{print $2}')
 
 dependencies="
 git \
@@ -56,6 +56,13 @@ echo -e "Done\n"
 
 # -------------------------------------------------------------------------- Oh My Zsh
 
+# backup old Oh My Zsh if exists
+if [ -d ~/.oh-my-zsh ]; then
+	echo "Backing up old Oh My Zsh ..."
+	cp -rf ~/.oh-my-zsh ~/.oh-my-zsh.backup 2> /dev/null
+	rm -rf ~/.oh-my-zsh
+fi
+
 echo "Installing Oh My Zsh ..."
 quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 sudo chsh -s "$(which zsh)" "$(whoami)"
@@ -67,12 +74,31 @@ echo "Installing dotfiles"
 dotfiles_dir="tmp/dotfiles"
 quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
 
+# backup old .zshrc if exists
+if [ -f ~/.zshrc ]; then
+	echo "Backing up old .zshrc ..."
+	cp -f ~/.zshrc ~/.zshrc.backup 2> /dev/null
+	rm -f ~/.zshrc
+fi
 mv "$dotfiles_dir/configs/.zshrc" "$HOME"
 
+# backup old .tmux.conf if exists
+if [ -f ~/.tmux.conf ]; then
+	echo "Backing up old .tmux.conf ..."
+	cp -f ~/.tmux.conf ~/.tmux.conf.backup 2> /dev/null
+	rm -f ~/.tmux.conf
+fi
 mv "$dotfiles_dir/configs/.tmux.conf" "$HOME"
 
-# make sure nvim directory exists
-mkdir -p "$HOME/.config/nvim"
+# backup old init.vim if exists
+if [ -f ~/.config/nvim/init.vim ]; then
+	echo "Backing up old init.vim ..."
+	cp -f ~/.config/nvim/init.vim ~/.config/nvim/init.vim.backup 2> /dev/null
+	rm -f ~/.config/nvim/init.vim
+else
+	# make sure nvim directory exists
+	mkdir -p "$HOME/.config/nvim"
+fi
 mv "$dotfiles_dir/configs/init.vim" "$HOME/.config/nvim"
 
 rm -rf "$dotfiles_dir"
