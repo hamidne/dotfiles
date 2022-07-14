@@ -1,9 +1,40 @@
 # in the name of God
 
-if [ -z "$TMUX" ] # When zsh is started attach to current tmux session or create a new one
+# --------------------------------------------------------------------------------------- Tmux
+
+# get basename of the current directory
+session_name=${PWD##*/} 
+
+# create a new new-session based on current working directory
+if ! tmux has-session -t "$session_name" 2> /dev/null
 then
-    tmux attach -t TMUX || tmux new -s TMUX
+    TMUX='' tmux new-session -s "$session_name" -d
 fi
+
+# attach if outside of tmux, switch if you're in tmux.
+if [[ -z "$TMUX" ]]; then
+  tmux attach -t "$session_name"
+else
+  tmux switch-client -t "$session_name"
+fi
+
+function tm() {
+  select select in $(tmux ls -F '#S'); do
+      break;
+  done
+
+  if [ -z "$select" ]
+  then
+      echo "You didn't select an appropriate choice"
+  else
+      # attach if outside of tmux, switch if you're in tmux.
+      if [[ -z "$TMUX" ]]; then
+          tmux attach -t "$select"
+      else
+          tmux switch-client -t "$select"
+      fi
+  fi
+}
 
 # --------------------------------------------------------------------------------------- Neovim
 
