@@ -7,8 +7,9 @@ if [ "$(uname)" != 'Linux' ]; then
 	exit 0
 fi
 
+read -p "Backup old dotfiles if exists? (y[yes] / n[no])" backup_dotfiles
 
-quiet_git() {
+function quiet_git() {
 	stdout=$(mktemp)
 	stderr=$(mktemp)
 
@@ -19,6 +20,21 @@ quiet_git() {
 	fi
 
 	rm -f "$stdout" "$stderr"
+}
+
+# type($1) - path($2) - name($3)
+function backup() {
+	if [ "$backup_dotfiles" != "y" ] || [ "$backup_dotfiles" != "Y" ]; then
+		return
+	fi
+
+	if [ "$1" = "d" ] && [ -d $2 ]; then
+		cp -f $1 "$1.backup" 2> /dev/null
+		rm -f $1
+	elif [ "$1" = "f" ] && [ -f $2 ]; then
+		cp -rf $1 "$1.backup" 2> /dev/null
+		rm -rf $1
+	fi
 }
 
 # -------------------------------------------------------------------------- install dependencies
@@ -55,13 +71,7 @@ echo -e "Done\n"
 
 # -------------------------------------------------------------------------- Oh My Zsh
 
-# backup old Oh My Zsh if exists
-if [ -d ~/.oh-my-zsh ]; then
-	echo "Backing up old Oh My Zsh ..."
-	cp -rf ~/.oh-my-zsh ~/.oh-my-zsh.backup 2> /dev/null
-	rm -rf ~/.oh-my-zsh
-fi
-
+backup "d" "~/.oh-my-zsh" ".oh-my-zsh"
 echo "Installing Oh My Zsh ..."
 quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 sudo usermod --shell "$(which zsh)" "$(whoami)"
@@ -73,31 +83,14 @@ echo "Installing dotfiles"
 dotfiles_dir="tmp/dotfiles"
 quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
 
-# backup old .zshrc if exists
-if [ -f ~/.zshrc ]; then
-	echo "Backing up old .zshrc ..."
-	cp -f ~/.zshrc ~/.zshrc.backup 2> /dev/null
-	rm -f ~/.zshrc
-fi
+backup "f" "~/.zshrc" ".zshrc"
 mv "$dotfiles_dir/configs/.zshrc" "$HOME"
 
-# backup old .tmux.conf if exists
-if [ -f ~/.tmux.conf ]; then
-	echo "Backing up old .tmux.conf ..."
-	cp -f ~/.tmux.conf ~/.tmux.conf.backup 2> /dev/null
-	rm -f ~/.tmux.conf
-fi
+backup "f" "~/.tmux.conf" ".tmux.conf"
 mv "$dotfiles_dir/configs/.tmux.conf" "$HOME"
 
-# backup old init.vim if exists
-if [ -f ~/.config/nvim/init.vim ]; then
-	echo "Backing up old init.vim ..."
-	cp -f ~/.config/nvim/init.vim ~/.config/nvim/init.vim.backup 2> /dev/null
-	rm -f ~/.config/nvim/init.vim
-else
-	# make sure nvim directory exists
-	mkdir -p "$HOME/.config/nvim"
-fi
+mkdir -p "$HOME/.config/nvim"
+backup "f" "~/.config/nvim/init.vim" "init.vim"
 mv "$dotfiles_dir/configs/init.vim" "$HOME/.config/nvim"
 
 rm -rf "$dotfiles_dir"
