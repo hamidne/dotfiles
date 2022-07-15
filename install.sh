@@ -22,18 +22,18 @@ function quiet_git() {
 	rm -f "$stdout" "$stderr"
 }
 
-# type($1) - path($2) - name($3)
+# type($1) - path($2)
 function backup() {
-	if [ "$1" = "d" ] && [ -d $2 ]; then
-		if [ "$backup_dotfiles" != "y" ] || [ "$backup_dotfiles" != "Y" ]; then
-			cp -f $1 "$1.backup" 2> /dev/null
+	if [ "$1" = "d" ] && [ -d "$2" ]; then
+		if [ "$backup_dotfiles" = "y" ] || [ "$backup_dotfiles" = "Y" ]; then
+			cp -rf $2 "$2.backup" 2> /dev/null
 		fi
-		rm -f $1
-	elif [ "$1" = "f" ] && [ -f $2 ]; then
-		if [ "$backup_dotfiles" != "y" ] || [ "$backup_dotfiles" != "Y" ]; then
-			cp -rf $1 "$1.backup" 2> /dev/null
+		rm -rf $2
+	elif [ "$1" = "f" ] && [ -f "$2" ]; then
+		if [ "$backup_dotfiles" = "y" ] || [ "$backup_dotfiles" = "Y" ]; then
+			cp -f $2 "$2.backup" 2> /dev/null
 		fi
-		rm -rf $1
+		rm -f $2
 	fi
 }
 
@@ -71,7 +71,7 @@ echo -e "Done\n"
 
 # -------------------------------------------------------------------------- Oh My Zsh
 
-backup "d" "~/.oh-my-zsh" ".oh-my-zsh"
+backup "d" ~/.oh-my-zsh
 echo "Installing Oh My Zsh ..."
 quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 sudo usermod --shell "$(which zsh)" "$(whoami)"
@@ -83,14 +83,14 @@ echo "Installing dotfiles"
 dotfiles_dir="tmp/dotfiles"
 quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
 
-backup "f" "~/.zshrc" ".zshrc"
+backup "f" ~/.zshrc
 mv "$dotfiles_dir/configs/.zshrc" "$HOME"
 
-backup "f" "~/.tmux.conf" ".tmux.conf"
+backup "f" ~/.tmux.conf
 mv "$dotfiles_dir/configs/.tmux.conf" "$HOME"
 
-mkdir -p "$HOME/.config/nvim"
-backup "f" "~/.config/nvim/init.vim" "init.vim"
+mkdir -p ~/.config/nvim
+backup "f" ~/.config/nvim/init.vim
 mv "$dotfiles_dir/configs/init.vim" "$HOME/.config/nvim"
 
 rm -rf "$dotfiles_dir"
@@ -107,8 +107,9 @@ echo -e "Done\n"
 
 # -------------------------------------------------------------------------- tmux package manager
 
+backup "f" ~/.config/nvim/init.vim
 echo "Installing Tmux package manager ..."
-quiet_git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+quiet_git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo -e "Done\n"
 
 # -------------------------------------------------------------------------- vim-plug plugin manager
