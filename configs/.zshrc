@@ -129,10 +129,11 @@ alias snappvpnup="nmcli con up id snapp"
 alias snappvpndown="nmcli con down id snapp"
 
 # golang related
-export GOPATH='~/.config/go'
+export GOROOT=/usr/local/go
+export GOPATH=~/.config/go
 
 # export $PATH
-export PATH=$PATH:$HOME/.local/bin:$GOPATH:$GOPATH/bin
+export PATH=$PATH:$HOME/.local/bin:$GOROOT/bin:$GOPATH:$GOPATH/bin
 
 # --------------------------------------------------------------------------------------- Miscellaneous
 
