@@ -84,14 +84,14 @@ dotfiles_dir="tmp/dotfiles"
 quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
 
 backup "f" ~/.zshrc
-mv "$dotfiles_dir/configs/.zshrc" "$HOME"
+mv "$dotfiles_dir/configs/.zshrc" ~
 
 backup "f" ~/.tmux.conf
-mv "$dotfiles_dir/configs/.tmux.conf" "$HOME"
+mv "$dotfiles_dir/configs/.tmux.conf" ~
 
 mkdir -p ~/.config/nvim
 backup "f" ~/.config/nvim/init.vim
-mv "$dotfiles_dir/configs/init.vim" "$HOME/.config/nvim"
+mv "$dotfiles_dir/configs/init.vim" ~/.config/nvim
 
 rm -rf "$dotfiles_dir"
 echo -e "Done\n"
