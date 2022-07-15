@@ -2,8 +2,8 @@
 
 # --------------------------------------------------------------------------------------- Tmux
 
-# cts is a shorthand for create-tmux-session
-function cts() {
+# tns is a shorthand for tmux-new-session
+function tns() {
   session_name=$1
 
   if [ -z "$session_name" ]; then
@@ -24,8 +24,8 @@ function cts() {
   fi
 }
 
-# sts is a shorthand for select-tmux-session
-function sts() {
+# tss is a shorthand for tmux-switch-session
+function tss() {
   select select in $(tmux ls -F '#S'); do
     break;
   done
