@@ -7,7 +7,7 @@ if [ "$(uname)" != 'Linux' ]; then
 	exit 0
 fi
 
-read -p "Backup old dotfiles if exists? (y[yes] / n[no])" backup_dotfiles
+read -p "Backup old dotfiles if exists? ([y]es / [n]o)" backup_dotfiles
 
 function quiet_git() {
 	stdout=$(mktemp)
@@ -25,12 +25,12 @@ function quiet_git() {
 # type($1) - path($2)
 function backup() {
 	if [ "$1" = "d" ] && [ -d "$2" ]; then
-		if [ "$backup_dotfiles" = "y" ] || [ "$backup_dotfiles" = "Y" ]; then
+		if [ "$backup_dotfiles" = "${backup_dotfiles#[Yy]}" ]; then
 			cp -rf $2 "$2.backup" 2> /dev/null
 		fi
 		rm -rf $2
 	elif [ "$1" = "f" ] && [ -f "$2" ]; then
-		if [ "$backup_dotfiles" = "y" ] || [ "$backup_dotfiles" = "Y" ]; then
+		if [ "$backup_dotfiles" = "${backup_dotfiles#[Yy]}" ]; then
 			cp -f $2 "$2.backup" 2> /dev/null
 		fi
 		rm -f $2
