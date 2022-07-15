@@ -2,38 +2,39 @@
 
 # --------------------------------------------------------------------------------------- Tmux
 
-# get basename of the current directory
-session_name=${PWD##*/} 
+# cts is a shorthand for create-tmux-session
+function cts() {
+  session_name=$1
 
-# create a new new-session based on current working directory
-if ! tmux has-session -t "$session_name" 2> /dev/null
-then
+  if [ -z "$session_name" ]; then
+    # get basename of the current directory
+    session_name=${PWD##*/}
+  fi
+
+  # create a new new-session based on current working directory
+  if ! tmux has-session -t "$session_name" 2> /dev/null; then
     TMUX='' tmux new-session -s "$session_name" -d
-fi
+  fi
 
-# attach if outside of tmux, switch if you're in tmux.
-if [ -z "$TMUX" ]; then
-  tmux attach -t "$session_name"
-else
-  tmux switch-client -t "$session_name"
-fi
+  # attach if outside of tmux, switch if you're in tmux.
+  if [ -z "$TMUX" ]; then
+    tmux attach -t "$session_name"
+  else
+    tmux switch-client -t "$session_name"
+  fi
+}
 
 # sts is a shorthand for select-tmux-session
 function sts() {
   select select in $(tmux ls -F '#S'); do
-      break;
+    break;
   done
 
   if [ -z "$select" ]
   then
-      echo "You didn't select an appropriate choice"
+    echo "You didn't select an appropriate choice"
   else
-      # attach if outside of tmux, switch if you're in tmux.
-      if [ -z "$TMUX" ]; then
-          tmux attach -t "$select"
-      else
-          tmux switch-client -t "$select"
-      fi
+    cts "$select"
   fi
 }
 
