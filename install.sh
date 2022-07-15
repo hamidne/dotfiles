@@ -123,6 +123,13 @@ echo "Activating Neovim plugins ..."
 nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins. Check init.vim for errors and try again."
 echo -e "Done\n"
 
+# -------------------------------------------------------------------------- install powerline fonts
+
+echo "Installing Powerline fonts ..."
+quiet_git clone https://github.com/powerline/fonts.git --depth=1 &&
+	cd fonts && ./install.sh && cd .. && rm -rf fonts
+echo -e "Done\n"
+
 # -------------------------------------------------------------------------- install spaceship-prompt theme for zsh
 
 echo "Installing Spaceship-prompt theme for Zsh ..."
@@ -138,13 +145,6 @@ if xhost >/dev/null 2>&1; then # check if running desktop or headless
 	rm -f nord.sh
 	echo -e "Done\n"
 fi
-
-# -------------------------------------------------------------------------- install powerline fonts
-
-echo "Installing Powerline fonts ..."
-quiet_git clone https://github.com/powerline/fonts.git --depth=1 &&
-	cd fonts && ./install.sh && cd .. && rm -rf fonts
-echo -e "Done\n"
 
 # -------------------------------------------------------------------------- installation complete
 
