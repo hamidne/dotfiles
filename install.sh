@@ -24,15 +24,15 @@ function quiet_git() {
 
 # type($1) - path($2) - name($3)
 function backup() {
-	if [ "$backup_dotfiles" != "y" ] || [ "$backup_dotfiles" != "Y" ]; then
-		return
-	fi
-
 	if [ "$1" = "d" ] && [ -d $2 ]; then
-		cp -f $1 "$1.backup" 2> /dev/null
+		if [ "$backup_dotfiles" != "y" ] || [ "$backup_dotfiles" != "Y" ]; then
+			cp -f $1 "$1.backup" 2> /dev/null
+		fi
 		rm -f $1
 	elif [ "$1" = "f" ] && [ -f $2 ]; then
-		cp -rf $1 "$1.backup" 2> /dev/null
+		if [ "$backup_dotfiles" != "y" ] || [ "$backup_dotfiles" != "Y" ]; then
+			cp -rf $1 "$1.backup" 2> /dev/null
+		fi
 		rm -rf $1
 	fi
 }
