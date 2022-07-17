@@ -34,7 +34,7 @@ function tss() {
   then
     echo "You didn't select an appropriate choice"
   else
-    cts "$select"
+    tns "$select"
   fi
 }
 
