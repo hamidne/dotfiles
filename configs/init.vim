@@ -9,15 +9,26 @@
 :set softtabstop=4
 :set shiftwidth=4
 :set smarttab
-:set mouse=a
 
 " --------------------------------------------------------------------------------------- Plugins
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
-Plug 'tpope/vim-surround' " Surrounding ( ysw} )
-Plug 'preservim/nerdtree' " NerdTree (  )
+Plug 'tpope/vim-surround'   " Surrounding ( ysw} )
 Plug 'tpope/vim-commentary' " For comment ( gcc & gc ) 
+
+Plug 'preservim/nerdtree'
+Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'rafi/awesome-vim-colorschemes'
+
+Plug 'neoclide/coc.nvim' " auto completions
+
+Plug 'ryanoasis/vim-devicons' " Developer Icons
+
 
 " Plug 'tpope/vim-fugitive'
 " Plug 'scrooloose/syntastic'
@@ -25,16 +36,25 @@ Plug 'tpope/vim-commentary' " For comment ( gcc & gc )
 " Plug 'airblade/vim-gitgutter'
 " Plug 'plasticboy/vim-markdown'
 " Plug 'godlygeek/tabular'
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
 " Plug 'arcticicestudio/nord-vim'
 " 
 call plug#end()
 
 " --------------------------------------------------------------------------------------- Theme Settings
 
+nnoremap <C-f> :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+
+nmap <F8> :TagbarToggle<CR>
+
+:set completeopt-=preview " For No Previews
+
+let g:airline_powerline_fonts = 1
+
 " Set colorsceme to nord
-silent! colorscheme nord
+" silent! colorscheme nord
 
 " Activate nord airline theme
-let g:airline_theme='nord'
+" let g:airline_theme='nord'
+
