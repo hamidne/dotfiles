@@ -47,7 +47,7 @@ alias vim="nvim"
 
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="robbyrussell" # Set theme
+ZSH_THEME="agnoster" # Set oh-my-zsh theme
 
 plugins=(
   git # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugin:git

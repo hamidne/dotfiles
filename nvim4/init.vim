@@ -28,7 +28,6 @@ Plug 'neoclide/coc.nvim' " Auto completions
 
 Plug 'ryanoasis/vim-devicons' " Developer Icons
 
-
 " Plug 'tpope/vim-fugitive'
 " Plug 'scrooloose/syntastic'
 " Plug 'kien/ctrlp.vim'
@@ -36,7 +35,7 @@ Plug 'ryanoasis/vim-devicons' " Developer Icons
 " Plug 'plasticboy/vim-markdown'
 " Plug 'godlygeek/tabular'
 " Plug 'arcticicestudio/nord-vim'
-" 
+
 call plug#end()
 
 " --------------------------------------------------------------------------------------- Theme Settings
@@ -52,8 +51,7 @@ nmap <F8> :TagbarToggle<CR>
 let g:airline_powerline_fonts = 1
 
 " Set colorsceme to nord
-" silent! colorscheme nord
+silent! colorscheme nord
 
 " Activate nord airline theme
-" let g:airline_theme='nord'
-
+let g:airline_theme='nord'

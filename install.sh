@@ -110,7 +110,7 @@ echo -e "Done\n"
 
 backup "f" ~/.config/nvim/init.vim
 echo "Installing Tmux package manager ..."
-quiet_git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+quiet_git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 echo -e "Done\n"
 
 # -------------------------------------------------------------------------- Neovim plugin manager
