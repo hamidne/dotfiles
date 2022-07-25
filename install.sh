@@ -79,19 +79,20 @@ echo -e "Done\n"
 
 # -------------------------------------------------------------------------- dotfiles
 
-echo "Installing dotfiles"
+echo "Installing dotfiles ..."
 dotfiles_dir="tmp/dotfiles"
 quiet_git clone "https://github.com/mohammadne/dotfiles.git" "$dotfiles_dir"
 
 backup "f" ~/.zshrc
-mv "$dotfiles_dir/configs/.zshrc" ~
+mv "$dotfiles_dir/zsh/.zshrc" ~
 
-backup "f" ~/.tmux.conf
-mv "$dotfiles_dir/configs/.tmux.conf" ~
+mkdir -p ~/.config/tmux
+backup "f" ~/.config/tmux/tmux.conf
+mv "$dotfiles_dir/tmux/tmux.conf" ~/.config/tmux
 
 mkdir -p ~/.config/nvim
 backup "f" ~/.config/nvim/init.vim
-mv "$dotfiles_dir/configs/init.vim" ~/.config/nvim
+mv "$dotfiles_dir/nvim4/init.vim" ~/.config/nvim
 
 rm -rf "$dotfiles_dir"
 echo -e "Done\n"

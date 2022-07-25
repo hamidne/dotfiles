@@ -1,5 +1,3 @@
-" in the name of God
-
 " --------------------------------------------------------------------------------------- Configs
 
 :set number
@@ -17,15 +15,15 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'tpope/vim-surround'   " Surrounding ( ysw} )
 Plug 'tpope/vim-commentary' " For comment ( gcc & gc ) 
 
-Plug 'preservim/nerdtree'
-Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
+Plug 'preservim/nerdtree' " Explorer
+Plug 'preservim/tagbar' " Tagbar for code navigation
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'rafi/awesome-vim-colorschemes'
 
-Plug 'neoclide/coc.nvim' " auto completions
+Plug 'neoclide/coc.nvim' " Auto completions
 
 Plug 'ryanoasis/vim-devicons' " Developer Icons
 
