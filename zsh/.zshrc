@@ -41,7 +41,6 @@ function tss() {
 # --------------------------------------------------------------------------------------- Neovim
 
 export EDITOR="nvim"
-alias vim="nvim"
 
 # --------------------------------------------------------------------------------------- Oh-my-zsh
 
@@ -66,17 +65,7 @@ source $ZSH/oh-my-zsh.sh # required
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5' # Colorize autosuggest
 
-alias zshconfig="nvim ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
-
 # --------------------------------------------------------------------------------------- Develop
-
-# ssh related
-alias sshkey="xclip -selection clipboard < ~/.ssh/id_ed25519.pub && echo 'SSH Public Key copied to clipboard'"
-
-# vpn related
-alias snappvpnup="nmcli con up id snapp"
-alias snappvpndown="nmcli con down id snapp"
 
 # golang related
 export GOROOT=/usr/local/go
