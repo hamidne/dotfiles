@@ -18,10 +18,11 @@ Plug 'tpope/vim-commentary' " For comment ( gcc & gc )
 Plug 'preservim/nerdtree' " Explorer
 Plug 'preservim/tagbar' " Tagbar for code navigation
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline' " status bar
+Plug 'vim-airline/vim-airline-themes' " status bar themes
 
-Plug 'rafi/awesome-vim-colorschemes'
+Plug 'rafi/awesome-vim-colorschemes' " awesome colorshcemes
+Plug 'arcticicestudio/nord-vim' " nord colorshceme
 
 Plug 'neoclide/coc.nvim' " Auto completions
 

@@ -47,8 +47,7 @@ alias vim="nvim"
 
 export ZSH="$HOME/.oh-my-zsh"
 
-SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=true # Show prefix before first line in prompt
-ZSH_THEME="spaceship" # Set theme
+ZSH_THEME="robbyrussell" # Set theme
 
 plugins=(
   git # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugin:git
@@ -69,56 +68,6 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5' # Colorize autosuggest
 
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
-
-# --------------------------------------------------------------------------------------- Spaceship-prompt
-
-# Spaceship-prompt customization
-SPACESHIP_PROMPT_ORDER=(
-  dir             # Current directory section
-  user            # Username section
-  host            # Hostname section
-  git             # Git section (git_branch + git_status)
-  time            # Time stampts section
-
-  # languages related
-  golang rust pyenv
-
-  # devops related
-  # docker aws kubecontext
-  
-  exec_time       # Execution time
-  line_sep        # Line break
-  battery         # Battery level and status
-  vi_mode         # Vi-mode indicator
-  jobs            # Background jobs indicator
-  char            # Prompt character
-)
-
-# PROMPT
-SPACESHIP_DIR_PREFIX="%{$fg[blue]%}┌─[%b "
-SPACESHIP_DIR_SUFFIX="%{$fg[blue]%} ] "
-SPACESHIP_CHAR_SYMBOL="%{$fg[blue]%}└─▪%b "
-
-# GOLANG
-SPACESHIP_GOLANG_SHOW=true
-SPACESHIP_GOLANG_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"
-SPACESHIP_GOLANG_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
-SPACESHIP_GOLANG_SYMBOL="🐹 "
-SPACESHIP_GOLANG_COLOR="cyan"
-
-# RUST
-SPACESHIP_RUST_SHOW=true
-SPACESHIP_RUST_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"
-SPACESHIP_RUST_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
-SPACESHIP_RUST_SYMBOL="𝗥 "
-SPACESHIP_RUST_COLOR="red"
-
-# PYENV
-SPACESHIP_PYENV_SHOW=true
-SPACESHIP_PYENV_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"
-SPACESHIP_PYENV_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
-SPACESHIP_PYENV_SYMBOL="🐍 "
-SPACESHIP_PYENV_COLOR="yellow"
 
 # --------------------------------------------------------------------------------------- Develop
 
