@@ -106,43 +106,32 @@ quiet_git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH
 quiet_git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
 echo -e "Done\n"
 
-# -------------------------------------------------------------------------- tmux package manager
+# -------------------------------------------------------------------------- Tmux package manager
 
 backup "f" ~/.config/nvim/init.vim
 echo "Installing Tmux package manager ..."
 quiet_git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo -e "Done\n"
 
-# -------------------------------------------------------------------------- vim-plug plugin manager
+# -------------------------------------------------------------------------- Neovim plugin manager
 
-echo "Installing Vim-plug plugin manager ..."
+echo "Installing & Activating Neovim plugin manager ..."
 curl -sfLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-echo -e "Done\n"
-
-# -------------------------------------------------------------------------- activate nvim plugins
-
-echo "Activating Neovim plugins ..."
-nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins. Check init.vim for errors and try again."
+nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins."
 echo -e "Done\n"
 
 # -------------------------------------------------------------------------- install powerline fonts
 
-echo "Installing Powerline fonts ..."
-quiet_git clone https://github.com/powerline/fonts.git --depth=1 &&
-	cd fonts && ./install.sh && cd .. && rm -rf fonts
+echo "Installing necessary fonts ..."
+
+quiet_git clone https://github.com/powerline/fonts.git --depth=1 && cd fonts && ./install.sh && cd .. && rm -rf fonts
+
 echo -e "Done\n"
 
-# -------------------------------------------------------------------------- install spaceship-prompt theme for zsh
-
-echo "Installing Spaceship-prompt theme for Zsh ..."
-quiet_git clone https://github.com/denysdovhan/spaceship-prompt.git "$HOME/.oh-my-zsh/themes/spaceship-prompt"
-ln -s "$HOME/.oh-my-zsh/themes/spaceship-prompt/spaceship.zsh-theme" "$HOME/.oh-my-zsh/themes/spaceship.zsh-theme"
-echo -e "Done\n"
-
-# -------------------------------------------------------------------------- install nord theme for gnome terminal
+# -------------------------------------------------------------------------- install nord themes
 
 if xhost >/dev/null 2>&1; then # check if running desktop or headless
-	echo "Installing Nord theme for Gnome Terminal..."
+	echo "Installing Nord theme for Gnome Terminal ..."
 	curl -sO https://raw.githubusercontent.com/arcticicestudio/nord-gnome-terminal/develop/src/nord.sh && chmod +x nord.sh && ./nord.sh
 	rm -f nord.sh
 	echo -e "Done\n"
