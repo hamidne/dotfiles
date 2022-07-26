@@ -20,10 +20,9 @@ packer.init({
   package_root = util.join_paths(vim.fn.stdpath('data'), 'site', 'pack')
 })
 
---- startup and add configure plugins
+-- add you plugins here:
 packer.startup(function()
   local use = use
-  -- add you plugins here like:
-  -- use 'neovim/nvim-lspconfig'
+  use 'ellisonleao/gruvbox.nvim'
   end
 )

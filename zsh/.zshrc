@@ -1,4 +1,10 @@
-# in the name of God
+# --------------------------------------------------------------------------------------- Initialization
+
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # --------------------------------------------------------------------------------------- Tmux
 
@@ -38,11 +44,7 @@ function tss() {
   fi
 }
 
-# --------------------------------------------------------------------------------------- Neovim
-
-export EDITOR="nvim"
-
-# --------------------------------------------------------------------------------------- Oh-my-zsh
+# --------------------------------------------------------------------------------------- Oh my zsh
 
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -76,6 +78,8 @@ export PATH=$PATH:$HOME/.local/bin:$GOROOT/bin:$GOPATH:$GOPATH/bin
 
 # --------------------------------------------------------------------------------------- Miscellaneous
 
+export EDITOR="nvim"
+
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
@@ -89,3 +93,6 @@ pastefinish() {
 
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
