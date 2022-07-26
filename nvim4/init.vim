@@ -36,9 +36,6 @@ nmap <F8> :TagbarToggle<CR>
 " set colorscheme
 autocmd vimenter * ++nested colorscheme gruvbox
 
-" set background
-set background=dark
-
 " add support for true-colors
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
