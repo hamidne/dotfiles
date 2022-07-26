@@ -34,9 +34,14 @@ nmap <F8> :TagbarToggle<CR>
 " --------------------------------------------------------------------------------------- Color Schemes
 
 autocmd vimenter * ++nested colorscheme gruvbox
-set background=light
-set termguicolors
-let g:gruvbox_termcolors=16
+set background=dark
+
+" add support for true-colors
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 
 " --------------------------------------------------------------------------------------- Status Bar
 
