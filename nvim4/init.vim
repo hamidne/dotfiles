@@ -33,7 +33,10 @@ nmap <F8> :TagbarToggle<CR>
 
 " --------------------------------------------------------------------------------------- Color Schemes
 
+" set colorscheme
 autocmd vimenter * ++nested colorscheme gruvbox
+
+" set background
 set background=dark
 
 " add support for true-colors
