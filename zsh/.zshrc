@@ -51,14 +51,20 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster" # Set oh-my-zsh theme
 
 plugins=(
-  git # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugin:git
+  # zsh-users plugins
   history-substring-search # ZSH port of Fish history search. Begin typing command, use up arrow to select previous use
   zsh-autosuggestions # Suggests commands based on your history
   zsh-completions # More completions
   zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
+  
+  # theming
   colored-man-pages # Self-explanatory
+  
+  # development plugins
+  git # https://github.com/robbyrussell/oh-my-zsh/wiki/Plugin:git
   docker # docker auto-completions
   kubectl # kubernetes auto-completions
+  golang # go language support
 )
 
 autoload -U compinit && compinit # reload completions for zsh-completions
