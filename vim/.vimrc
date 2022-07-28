@@ -1,24 +1,28 @@
 " --------------------------------------------------------------------------------------- Configuration
 
-:set number
-:set relativenumber 
-:set autoindent
-:set tabstop=4
-:set softtabstop=4
-:set shiftwidth=4
-:set smarttab
-:set completeopt-=preview " For No Previews
+set number
+set relativenumber 
+set autoindent
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set smarttab
+set completeopt-=preview " For No Previews
 
 " --------------------------------------------------------------------------------------- Plugins
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.config/vim/plugged')
 
 Plug 'tpope/vim-surround'   " Surrounding ( ysw} )
 Plug 'tpope/vim-commentary' " For comment ( gcc & gc ) 
 Plug 'preservim/nerdtree' " Explorer
 Plug 'preservim/tagbar' " Tagbar for code navigation
 Plug 'vim-airline/vim-airline' " status bar
-Plug 'morhetz/gruvbox' " gruvbox colorshceme
+
+" colorschemes
+Plug 'arcticicestudio/nord-vim'
+Plug 'morhetz/gruvbox'
+
 Plug 'ryanoasis/vim-devicons' " Developer Icons
 
 call plug#end()
