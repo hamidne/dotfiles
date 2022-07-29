@@ -44,7 +44,7 @@ function tss() {
   fi
 }
 
-# --------------------------------------------------------------------------------------- Oh my zsh
+# --------------------------------------------------------------------------------------- Plugins
 
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -73,18 +73,23 @@ source $ZSH/oh-my-zsh.sh # required
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5' # Colorize autosuggest
 
-# --------------------------------------------------------------------------------------- Develop
+# --------------------------------------------------------------------------------------- Development
 
 # golang related
 export GOROOT=/usr/local/go
 export GOPATH=~/.config/go
+
+# add homebrew path on MacOS
+if [[ "$(uname)" = 'Darwin' ]]; then
+  PATH=$PATH:/opt/homebrew/bin
+fi
 
 # export $PATH
 export PATH=$PATH:$HOME/.local/bin:$GOROOT/bin:$GOPATH:$GOPATH/bin
 
 # --------------------------------------------------------------------------------------- Miscellaneous
 
-export EDITOR="nvim"
+export EDITOR="vim"
 
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
