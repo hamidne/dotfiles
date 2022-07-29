@@ -33,7 +33,7 @@ git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTO
 
 - `.zshrc` --> `~/`
 
-- `.zsh_aliases` --> `~/`
+- `.aliases.zsh` --> `~/`
 
 ## Features
 
@@ -46,11 +46,5 @@ git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTO
 - Directory history
 
 - Git feedback
-
-- Terminal multiplexing
-
-- Window tabbing
-
-- Nord theming
 
 - Persistence
