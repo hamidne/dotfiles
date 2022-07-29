@@ -9,11 +9,11 @@ sudo dnf install -y tmux
 ## install [tmux plugin manager](https://github.com/tmux-plugins/tpm)
 
 ``` bash
-git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
 ## copy config files
 
-- `tmux.conf` --> `~/.config/tmux`
+- `.tmux.conf` --> `~/`
 
-- `themes` --> `~/.config/tmux`
+- `themes` --> `~/.tmux`
