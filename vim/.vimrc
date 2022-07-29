@@ -9,6 +9,8 @@ set shiftwidth=4
 set smarttab
 set completeopt-=preview " For No Previews
 
+set viminfo+=n~/.vim/viminfo " viminfo file location
+
 " --------------------------------------------------------------------------------------- Plugins
 
 call plug#begin('~/.config/vim/plugged')
