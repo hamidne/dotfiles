@@ -4,7 +4,7 @@ style=$1
 config=$2
 
 # load color palette
-source ~/.config/tmux/themes/configs/"$config".conf
+source ~/.tmux/themes/configs/"$config".conf
 
 function set() {
    tmux set-option -gq "$1" "$2"
@@ -38,4 +38,4 @@ set "window-style" "fg=$inactive,bg=default"
 set "status-style" "fg=$background,bg=$background"
 
 # source the style with appropriate theme config
-source ~/.config/tmux/themes/styles/"$style".sh "$config"
+source ~/.tmux/themes/styles/"$style".sh "$config"
