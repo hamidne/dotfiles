@@ -20,3 +20,11 @@
 - Fedora 💚
 
 - MacOS
+
+## scripts
+
+- `cloner`: clones dotfiles repository in the place.
+
+- `install`: installs the dependencies needed in the dotfiles.
+
+- `linker`: create symlinks to the dotfile configs.
