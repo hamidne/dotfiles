@@ -1,6 +1,6 @@
 # Terminal
 
-## MacOs
+## MacOS
 
 - install developer tools
 
@@ -24,6 +24,6 @@ xcode-select --install
 # Linux Gnome Terminal
 bash -c "$(wget -qO- https://git.io/vQgMr)"
 
-# MacOs iTerm
+# MacOS iTerm
 bash -c "$(curl -sLo- https://git.io/vQgMr)"
 ```
