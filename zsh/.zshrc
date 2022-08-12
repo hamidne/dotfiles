@@ -105,5 +105,5 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-# To customize prompt, run `p10k configure` or edit ~/.config/p10k/rainbow.zsh.
-[[ ! -f ~/.config/p10k/rainbow.zsh ]] || source ~/.config/p10k/rainbow.zsh
+# To customize prompt, run `p10k configure` or edit ~/.config/p10k.zsh.
+[[ ! -f ~/.config/p10k.zsh ]] || source ~/.config/p10k.zsh
