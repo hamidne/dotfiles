@@ -21,10 +21,18 @@
 
 - MacOS
 
-## scripts
+## installation
 
-- `cloner`: clones dotfiles repository in the place.
+1. clone the repository
 
-- `install`: installs the dependencies needed in the dotfiles.
+    ``` bash
+    git clone "https://github.com/mohammadne/dotfiles.git" ~/.dotfiles
+    ```
 
-- `linker`: create symlinks to the dotfile configs.
+2. run appropriate scripts
+
+   - `cloner`: clones dotfiles repository in the place.
+
+   - `install`: installs the dependencies needed in the dotfiles.
+
+   - `linker`: create symlinks to the dotfile configs.
