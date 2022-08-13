@@ -34,7 +34,7 @@ function backup() {
     if ( [ "$1" = "directory" ] && [ -d "$2" ] ) || ( [ "$1" = "file" ] && [ -f "$2" ] ); then
         read -n1 -p "Backup existing "$2" "$1"? ([y]es / [n]o)" confirmation
     else
-        return # return the function if the directory or the file doesn't exists.
+        return # return if the directory or the file doesn't exists.
     fi
 
     # backup if confirmed
@@ -54,6 +54,7 @@ curl \
 wget \
 zsh \
 tmux \
+vim \
 neovim \
 "
 
@@ -89,15 +90,18 @@ fi
 # --------------------------------------------------------------------------  ZSH
 
 # change default shell if ZSH is not the default running shell
-# on MacOS the default shell is ZSH, so we skip it.s
 if [[ $platform = "Linux" && "$SHELL" != *"zsh"* ]]; then
     echo "changing default shell to ZSH ..."
-    sudo usermod --shell "$(which zsh)" "$(whoami)"
+    if [ $platform = 'Mac' ]; then
+        sudo dscl . -create /Users/$USER UserShell "$(which zsh)"
+    elif [ $platform = 'Mac' ]; then
+        sudo usermod --shell "$(which zsh)" "$(whoami)"
+    fi
 fi
 
 echo "Installing Oh My Zsh ..."
 backup "directory" ~/.oh-my-zsh
-quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" 1>/dev/null
 
 echo "Installing Oh My Zsh plugins ..."
 quiet_git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -111,6 +115,12 @@ quiet_git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOM
 echo "Installing Tmux package manager ..."
 quiet_git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 
+# -------------------------------------------------------------------------- VIM
+
+echo "Installing & Activating vim plugin manager ..."
+curl -sfLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins."
+
 # -------------------------------------------------------------------------- NeoVIM
 
 echo "Installing & Activating Neovim plugin manager ..."
@@ -122,3 +132,38 @@ nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins."
 echo "Installing necessary fonts ..."
 quiet_git clone https://github.com/powerline/fonts.git --depth=1 && cd fonts && ./install.sh && cd .. && rm -rf fonts
 
+# -------------------------------------------------------------------------- install nord themes
+
+if xhost >/dev/null 2>&1; then # check if running desktop or headless
+	echo "Installing Nord theme for Gnome Terminal ..."
+	curl -sO https://raw.githubusercontent.com/arcticicestudio/nord-gnome-terminal/develop/src/nord.sh && chmod +x nord.sh && ./nord.sh
+	rm -f nord.sh
+	echo -e "Done\n"
+fi
+
+
+
+echo "------------------------------------------------------------------------------------------------------ "
+echo "    _            __        ____      __  _                                           __     __         "
+echo "   (_)___  _____/ /_____  / / /___ _/ /_(_)___  ____     _________  ____ ___  ____  / /__  / /____     "
+echo "  / / __ \/ ___/ __/ __ \`/ / / __ \`/ __/ / __ \/ __ \   / ___/ __ \/ __ \`__ \/ __ \/ / _ \/ __/ _ \ "
+echo " / / / / /__  / /_/ /_/ / / / /_/ / /_/ / /_/ / / / /  / /__/ /_/ / / / / / / /_/ / /  __/ /_/  __/    "
+echo "/_/_/ /_/____/\__/\____/_/_/\__,_/\__/_/\____/_/ /_/   \___/\____/_/ /_/ /_/ .___/_/\___/\__/\___/     "
+echo "                                                                          /_/                          "
+echo "------------------------------------------------------------------------------------------------------ "
+echo ''
+echo "      * Note: You will have to log out and back in for Zsh to be set as the default shell."
+echo "              If you don't want to log out now, enter 'zsh'"
+echo ''
+echo ''
+echo '      * Press Ctrl + a, then I to load Tmux plugins'
+echo ''
+if [ "$platform" = 'Linux' ]; then
+	echo '      * In Gnome Terminal preferences, set Nord as your default profile'
+elif [ "$platform" = 'Mac' ]; then
+	echo '      * In iTerm, set your color profile to Nord'
+fi
+echo ''
+echo '      * Set an appropriate font (e.g. Inconsolata for Powerline)'
+echo ''
+echo ''
