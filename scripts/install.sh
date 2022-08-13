@@ -27,20 +27,23 @@ quiet_git() {
 }
 
 # backup existing files and directories
-# parameter 1: type of the backup - string - required
+# parameter 1: type of the backup ( "directory" / "file" ) - string - required
 # parameter 2: path to the config file or directory - string - required
 function backup() {
-	if [ "$1" = "d" ] && [ -d "$2" ]; then
-		if [ "$backup_dotfiles" = "${backup_dotfiles#[Yy]}" ]; then
-			cp -rf $2 "$2.backup" 2> /dev/null
-		fi
-		rm -rf $2
-	elif [ "$1" = "f" ] && [ -f "$2" ]; then
-		if [ "$backup_dotfiles" = "${backup_dotfiles#[Yy]}" ]; then
-			cp -f $2 "$2.backup" 2> /dev/null
-		fi
-		rm -f $2
-	fi
+    # check existance of the directory or the file and ask for confirmation
+    if ( [ "$1" = "directory" ] && [ -d "$2" ] ) || ( [ "$1" = "file" ] && [ -f "$2" ] ); then
+        read -n1 -p "Backup existing "$2" "$1"? ([y]es / [n]o)" confirmation
+    else
+        return # return the function if the directory or the file doesn't exists.
+    fi
+
+    # backup if confirmed
+    if [[ $confirmation == "y" || $confirmation == "Y" ]]; then
+        cp -rf $2 "$2.backup" 2> /dev/null 
+    fi
+
+    # remove original directory or file anyway
+    rm -rf $2
 }
 
 # --------------------------------------------------------------------------  dependencies
@@ -53,6 +56,8 @@ zsh \
 tmux \
 neovim \
 "
+
+echo "Installing dependencies ..."
 
 # install dependencies on MacOS
 if [ $platform = 'Mac' ]; then
@@ -83,7 +88,18 @@ fi
 
 # --------------------------------------------------------------------------  ZSH
 
-echo "Installing ZSH plugins ..."
+# change default shell if ZSH is not the default running shell
+# on MacOS the default shell is ZSH, so we skip it.s
+if [[ $platform = "Linux" && "$SHELL" != *"zsh"* ]]; then
+    echo "changing default shell to ZSH ..."
+    sudo usermod --shell "$(which zsh)" "$(whoami)"
+fi
+
+echo "Installing Oh My Zsh ..."
+backup "directory" ~/.oh-my-zsh
+quiet_git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+
+echo "Installing Oh My Zsh plugins ..."
 quiet_git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 quiet_git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 quiet_git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
