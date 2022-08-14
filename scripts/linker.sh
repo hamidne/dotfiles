@@ -16,11 +16,11 @@ if [ ! -d "$dotfiles_home" ]; then
     git clone https://github.com/mohammadne/dotfiles.git $dotfiles_home --quiet
 fi
 
-mkdir -p ~/.config
+# create ~/.config directory which holds most of configurations.
+mkdir -p ~/.config 
 
 # zsh related
 ln -s "$dotfiles_home/zsh/zshrc" ~/.zshrc
-ln -s "$dotfiles_home/zsh/zsh.aliases" ~/.zsh.aliases
 ln -s "$dotfiles_home/zsh/p10k.zsh" ~/.config/p10k.zsh
 
 # tmux

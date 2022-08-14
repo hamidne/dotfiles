@@ -14,7 +14,7 @@ sudo usermod --shell "$(which zsh)" "$(whoami)"
 
 ``` bash
 # install via curl
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+ZSH=~/.config/oh-my-zsh sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
 ## install zsh-users custom plugins
