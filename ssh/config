@@ -1,0 +1,9 @@
+# Snapp! account
+Host gitlab.snapp.ir
+   IdentityFile ~/.ssh/id_ed25519_snapp
+   User mohammad.nasresfahani
+
+# Personal account, - the default config
+Host *
+   IdentityFile ~/.ssh/id_ed25519
+   User mohammadne

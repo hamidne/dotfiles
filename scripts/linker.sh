@@ -26,6 +26,10 @@ mkdir -p ~/.config
 backup "file" ~/.gitconfig
 ln -s "$dotfiles_home/git/gitconfig" ~/.gitconfig
 
+# ssh
+backup "file" ~/.ssh/config
+ln -s "$dotfiles_home/ssh/config" ~/.ssh/config
+
 # zshrc
 backup "file" ~/.zshrc
 ln -s "$dotfiles_home/zsh/zshrc" ~/.zshrc
