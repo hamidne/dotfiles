@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # load color palette config
-source ~/.tmux/themes/configs/"$1".conf
+source ~/.config/tmux/themes/configs/"$1".conf
 
 function set() {
    tmux set-option -gq "$1" "$2"
