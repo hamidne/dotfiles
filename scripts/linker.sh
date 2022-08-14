@@ -1,8 +1,19 @@
 #!/bin/bash
 set -e
 
-colorschemes="afterglow"
+dotfiles_home=~/.dotfiles
 
-for colorscheme in $colorschemes; do
-    bash -c "$(curl -so- https://raw.githubusercontent.com/Gogh-Co/Gogh/master/themes/$colorscheme.sh)"
-done
+# check existance of dotfiles directory
+if [ ! -d "$dotfiles_home" ]; then
+    read -n1 -ep "dotfile directory doesn't exist, clone? ([y]es / [n]o) " confirmation
+
+    # exit the script if not confirmed
+    if [[ $confirmation != "y" && $confirmation != "Y" ]]; then
+        echo "missing $dotfiles_home, please clone the repository there"
+        exit 1
+    fi
+
+    git clone https://github.com/mohammadne/dotfiles.git $dotfiles_home --quiet
+fi
+
+echo 'test'

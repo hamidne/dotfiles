@@ -12,20 +12,6 @@ else
 	exit 0
 fi
 
-# make git be quiet
-quiet_git() {
-	stdout=$(mktemp)
-	stderr=$(mktemp)
-
-	if ! git "$@" </dev/null >"$stdout" 2>"$stderr"; then
-		cat "$stderr" >&2
-		rm -f "$stdout" "$stderr"
-		exit 1
-	fi
-
-	rm -f "$stdout" "$stderr"
-}
-
 # backup existing files and directories
 # parameter 1: type of the backup ( "directory" / "file" ) - string - required
 # parameter 2: path to the config file or directory - string - required
@@ -36,7 +22,7 @@ function backup() {
     fi
 
     # ask for confirmation
-    read -n1 -p "Backup existing "$2" "$1"? ([y]es / [n]o)" confirmation
+    read -n1 -ep "Backup existing "$2" "$1"? ([y]es / [n]o) " confirmation
 
     # backup if confirmed
     if [[ $confirmation == "y" || $confirmation == "Y" ]]; then
@@ -105,16 +91,16 @@ backup "directory" ~/.oh-my-zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" 1>/dev/null
 
 echo "Installing Oh My Zsh plugins ..."
-quiet_git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-quiet_git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-quiet_git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-quiet_git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search"
-quiet_git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k --quiet
+git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" --quiet
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" --quiet
+git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search" --quiet
+git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions" --quiet
 
 # -------------------------------------------------------------------------- Tmux
 
 echo "Installing Tmux package manager ..."
-quiet_git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm --quiet
 
 # -------------------------------------------------------------------------- VIM
 
@@ -125,7 +111,7 @@ vim +PlugInstall +qa || echo "Something went wrong installing vim plugins."
 # -------------------------------------------------------------------------- NeoVIM
 
 echo "Installing & Activating packer ..."
-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim --quiet
 nvim +PackerSync +qa || echo "Something went wrong installing nvim plugins."
 
 # -------------------------------------------------------------------------- Fonts
