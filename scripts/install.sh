@@ -149,16 +149,14 @@ if [ "$platform" == "Linux" ] && (command -v fc-cache &> /dev/null) ; then
     fc-cache -f "$font_home"
 fi
 
-# -------------------------------------------------------------------------- install nord themes
+# -------------------------------------------------------------------------- Terminal themes
 
-if xhost >/dev/null 2>&1; then # check if running desktop or headless
-	echo "Installing Nord theme for Gnome Terminal ..."
-	curl -sO https://raw.githubusercontent.com/arcticicestudio/nord-gnome-terminal/develop/src/nord.sh && chmod +x nord.sh && ./nord.sh
-	rm -f nord.sh
-	echo -e "Done\n"
-fi
+for theme in "one-dark one-light" ; do
+    bash -c "$(curl -so- https://raw.githubusercontent.com/Gogh-Co/Gogh/master/themes/$theme.sh)"
+done
 
-
+# TODO: check to be necessary on ubuntu
+# export TERMINAL=gnome-terminal
 
 echo "------------------------------------------------------------------------------------------------------ "
 echo "    _            __        ____      __  _                                           __     __         "

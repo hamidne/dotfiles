@@ -18,7 +18,7 @@ xcode-select --install
 
 - [Gogh](https://github.com/Gogh-Co/Gogh) is a great place
 
-> I love to install [Nord](https://github.com/arcticicestudio/nord) & [Gruvbox Dark](https://github.com/morhetz/gruvbox) options.
+> I love to install [OneDark](https://github.com/joshdick/onedark.vim) [Nord](https://github.com/arcticicestudio/nord) & [Gruvbox Dark](https://github.com/morhetz/gruvbox) options.
 
 ``` bash
 # Linux Gnome Terminal
