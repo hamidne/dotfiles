@@ -26,7 +26,7 @@ end
 -- Have packer use a popup window
 packer.init {
   snapshot_path = fn.stdpath "config" .. "/snapshots", -- snapshot = "july-24",
-  max_jobs = 50,
+  max_jobs = 16,
   display = {
     open_fn = function() return require("packer.util").float { border = "rounded" } end,
     prompt_border = "rounded", -- Border style of prompt popups.

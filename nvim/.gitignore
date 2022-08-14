@@ -1,5 +1,5 @@
 # packer compiled plugins (compile_path)
 plugin
 
-# packer snapshots (snapshots_path)
+# default save directory for snapshots (snapshots_path)
 snapshots
