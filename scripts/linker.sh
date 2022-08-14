@@ -26,7 +26,7 @@ ln -s "$dotfiles_home/zsh/zshrc" ~/.zshrc
 ln -s "$dotfiles_home/zsh/zsh.aliases" ~/.zsh.aliases
 ln -s "$dotfiles_home/zsh/p10k.zsh" ~/.config/p10k.zsh
 
-# tmux related
+# tmux
 ln -s "$dotfiles_home/tmux" ~/.config/tmux
 
 # vim
