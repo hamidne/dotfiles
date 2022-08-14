@@ -100,12 +100,12 @@ git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-
 # -------------------------------------------------------------------------- Tmux
 
 echo "Installing Tmux package manager ..."
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm --quiet
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm --quiet
 
 # -------------------------------------------------------------------------- VIM
 
 echo "Installing & Activating vim-plug ..."
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 vim +PlugInstall +qa || echo "Something went wrong installing vim plugins."
 
 # -------------------------------------------------------------------------- NeoVIM
