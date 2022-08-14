@@ -17,7 +17,10 @@ if [ ! -d "$dotfiles_home" ]; then
 fi
 
 # create ~/.config directory which holds most of configurations.
-mkdir -p ~/.config 
+mkdir -p ~/.config
+
+# git
+ln -s "$dotfiles_home/git/gitconfig" ~/.gitconfig
 
 # zsh related
 ln -s "$dotfiles_home/zsh/zshrc" ~/.zshrc
