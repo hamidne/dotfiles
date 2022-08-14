@@ -89,8 +89,6 @@ export PATH=$PATH:$HOME/.local/bin:$GOROOT/bin:$GOPATH:$GOPATH/bin
 
 # --------------------------------------------------------------------------------------- Miscellaneous
 
-export EDITOR="vim"
-
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
