@@ -1,5 +1,5 @@
-# compiled plugins
+# packer compiled plugins (compile_path)
 plugin
 
-# different snapshots of the configs
+# packer snapshots (snapshots_path)
 snapshots

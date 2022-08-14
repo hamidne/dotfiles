@@ -25,8 +25,7 @@ end
 
 -- Have packer use a popup window
 packer.init {
-  -- snapshot = "july-24",
-  snapshot_path = fn.stdpath "config" .. "/snapshots",
+  snapshot_path = fn.stdpath "config" .. "/snapshots", -- snapshot = "july-24",
   max_jobs = 50,
   display = {
     open_fn = function() return require("packer.util").float { border = "rounded" } end,
