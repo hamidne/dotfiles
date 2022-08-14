@@ -48,7 +48,7 @@ function tss() {
 
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="agnoster" # Set oh-my-zsh theme
+ZSH_THEME="powerlevel10k/powerlevel10k" # Set oh-my-zsh theme
 
 plugins=(
   # zsh-users plugins
@@ -74,6 +74,9 @@ source $ZSH/oh-my-zsh.sh # required
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5' # Colorize autosuggest
 
 # --------------------------------------------------------------------------------------- Development
+
+# instruct vim where to find your new vimrc configuration file
+export VIMINIT="source ~/.config/vim/vimrc"
 
 # golang related
 export GOROOT=/usr/local/go

@@ -30,7 +30,7 @@ ln -s "$dotfiles_home/zsh/p10k.zsh" ~/.config/p10k.zsh
 ln -s "$dotfiles_home/tmux" ~/.config/tmux
 
 # vim
-ln -s "$dotfiles_home/vim/vimrc" ~/.vimrc
+ln -s "$dotfiles_home/vim" ~/.config/vim
 
 # nvim
 ln -s "$dotfiles_home/nvim" ~/.config/nvim
