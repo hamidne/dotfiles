@@ -18,9 +18,6 @@ fi
 
 mkdir -p ~/.config
 
-# git
-ln -s "$dotfiles_home/git" ~/.git
-
 # zsh related
 ln -s "$dotfiles_home/zsh/zshrc" ~/.zshrc
 ln -s "$dotfiles_home/zsh/zsh.aliases" ~/.zsh.aliases
