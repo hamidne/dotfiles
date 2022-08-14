@@ -30,12 +30,13 @@ quiet_git() {
 # parameter 1: type of the backup ( "directory" / "file" ) - string - required
 # parameter 2: path to the config file or directory - string - required
 function backup() {
-    # check existance of the directory or the file and ask for confirmation
-    if ( [ "$1" = "directory" ] && [ -d "$2" ] ) || ( [ "$1" = "file" ] && [ -f "$2" ] ); then
-        read -n1 -p "Backup existing "$2" "$1"? ([y]es / [n]o)" confirmation
-    else
+    # check existance of the directory or the file
+    if ( [ "$1" = "directory" ] && [ ! -d "$2" ] ) || ( [ "$1" = "file" ] && [ ! -f "$2" ] ); then
         return # return if the directory or the file doesn't exists.
     fi
+
+    # ask for confirmation
+    read -n1 -p "Backup existing "$2" "$1"? ([y]es / [n]o)" confirmation
 
     # backup if confirmed
     if [[ $confirmation == "y" || $confirmation == "Y" ]]; then
@@ -90,11 +91,11 @@ fi
 # --------------------------------------------------------------------------  ZSH
 
 # change default shell if ZSH is not the default running shell
-if [[ $platform = "Linux" && "$SHELL" != *"zsh"* ]]; then
+if [[ "$SHELL" != *"zsh"* ]]; then
     echo "changing default shell to ZSH ..."
     if [ $platform = 'Mac' ]; then
         sudo dscl . -create /Users/$USER UserShell "$(which zsh)"
-    elif [ $platform = 'Mac' ]; then
+    elif [ $platform = 'Linux' ]; then
         sudo usermod --shell "$(which zsh)" "$(whoami)"
     fi
 fi
@@ -113,24 +114,40 @@ quiet_git clone https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOM
 # -------------------------------------------------------------------------- Tmux
 
 echo "Installing Tmux package manager ..."
-quiet_git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+quiet_git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 # -------------------------------------------------------------------------- VIM
 
-echo "Installing & Activating vim plugin manager ..."
-curl -sfLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins."
+echo "Installing & Activating vim plug plugin manager ..."
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+vim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins."
 
 # -------------------------------------------------------------------------- NeoVIM
 
-echo "Installing & Activating Neovim plugin manager ..."
-curl -sfLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-nvim +PlugInstall +qa || echo "Something went wrong installing Neovim plugins."
+echo "Installing & Activating nvim packer plugin manager ..."
+git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 
 # -------------------------------------------------------------------------- Fonts
 
-echo "Installing necessary fonts ..."
-quiet_git clone https://github.com/powerline/fonts.git --depth=1 && cd fonts && ./install.sh && cd .. && rm -rf fonts
+font_family="FiraCode"
+font_weights="Bold SemiBold Medium Retina Regular Light"
+font_repository="https://github.com/ryanoasis/nerd-fonts"
+
+font_home=$([ "$platform" == "Mac" ] && echo ~/Library/Fonts || echo ~/.local/share/fonts)
+font_home="$font_home/$font_family"
+
+echo "Installing "$font_family" font ..."
+
+for weight in $font_weights; do
+    mkdir -p $font_home && cd $font_home
+    curl -fLo "$weight.ttf" "$font_repository/raw/master/patched-fonts/$font_family/$weight/complete/Fira%20Code%20$weight%20Nerd%20Font%20Complete.ttf"
+done
+
+# Reset font cache on Linux (if fc-cache command exists and manages the fonts)
+if [ "$platform" == "Linux" ] && (command -v fc-cache &> /dev/null) ; then
+    echo "Resetting font cache ..."
+    fc-cache -f "$font_home"
+fi
 
 # -------------------------------------------------------------------------- install nord themes
 
