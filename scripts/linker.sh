@@ -13,7 +13,7 @@ if [ ! -d "$dotfiles_home" ]; then
         exit 1
     fi
 
-    git clone https://github.com/mohammadne/dotfiles.git $dotfiles_home --quiet
+    git clone git@github.com/mohammadne/dotfiles.git $dotfiles_home --quiet
 fi
 
 # source common file to include common stuffs!
