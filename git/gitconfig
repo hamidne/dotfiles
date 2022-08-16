@@ -1,3 +1,7 @@
+[init]
+	defaultBranch = main
 [user]
 	email = mohammadne@mail.ru
 	name = mohammadne
+[pull]
+	rebase = true
