@@ -80,7 +80,7 @@ export VIMINIT="source ~/.config/vim/vimrc"
 
 # golang related
 export GOROOT=/usr/local/go
-export GOPATH=~/.config/go
+export GOPATH=~/.local/share/go
 
 # add homebrew path on MacOS
 if [[ "$(uname)" = 'Darwin' ]]; then
