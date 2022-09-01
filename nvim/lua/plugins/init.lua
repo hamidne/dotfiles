@@ -70,8 +70,9 @@ packer.startup(function(use)
 
   ---------------------------------------------------------------------- Others
 
-  -- onedark colorschems
-  use { 'navarasu/onedark.nvim', config = function() require('plugins.onedark') end }
+  -- colorschems
+  -- use { 'navarasu/onedark.nvim', config = function() require('plugins.themes.onedark') end }
+  use { 'rmehri01/onenord.nvim', config = function() require('plugins.themes.onenord') end }
 
   use {
     'nvim-telescope/telescope.nvim', -- Fuzzy Finder

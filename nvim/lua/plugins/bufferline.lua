@@ -7,7 +7,9 @@ local diagnostics_icons = require('icons.diagnostics')
 
 bufferline.setup {
 	options = {
-		indicator_icon = "",
+		indicator = {
+			icon = "",
+		},
 
 		diagnostics = "nvim_lsp",
 		diagnostics_indicator = function(_, _, diagnostics_dict, _)
@@ -39,7 +41,7 @@ bufferline.setup {
 
 				return splits[#splits]
 			end,
-			padding = 1,
+			padding = 0,
 		}},
 
 		color_icons = true,
