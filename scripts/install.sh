@@ -50,12 +50,12 @@ if [ $platform = 'Linux' ]; then
 
     if [ "$distro" = 'ubuntu' ] || [ "$distro" = 'debian' ]; then
         sudo apt-get -qq update # update package list in debian distors
-        for dependency in $dependencies; do sudo apt-get -qq install -y "$dependency" done
+        for dependency in $dependencies; do sudo apt-get -qq install -y "$dependency"; done
     elif [ "$distro" = 'fedora' ]; then
 		dependencies+=("python3-neovim") # python3-neovim is needed for neovim in redhat distros
-        for dependency in $dependencies; do sudo dnf -y -q install "$dependency" done
+        for dependency in $dependencies; do sudo dnf -y -q install "$dependency"; done
     elif [ "$distro" = 'arch' ]; then
-        for dependency in $dependencies; do sudo pacman -q -S --noconfirm "$dependency" 1>/dev/null done
+        for dependency in $dependencies; do sudo pacman -q -S --noconfirm "$dependency" 1>/dev/null; done
     fi
 fi
 
