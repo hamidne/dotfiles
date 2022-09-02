@@ -15,6 +15,12 @@ dashboard.custom_header = {
 
 dashboard.custom_center = {
   {
+    icon = '  ',
+    desc = 'New  File                               ',
+    action = 'enew',
+    shortcut = '<Leader> e  ',
+  },
+  {
     icon = '  ',
     desc = 'Find  File                              ',
     action = 'Telescope find_files',
@@ -22,7 +28,7 @@ dashboard.custom_center = {
   },
   {
     icon = '  ',
-    desc = 'Recently opened files                   ',
+    desc = 'Recently Opened Files                   ',
     action = 'Telescope oldfiles',
     shortcut = '<Leader> f r',
   },
@@ -33,16 +39,16 @@ dashboard.custom_center = {
     shortcut = '<Leader> f g',
   },
   {
+    icon = '  ',
+    desc = 'Update Plugins                          ',
+    action = 'PackerUpdate',
+    shortcut = '<Leader> u  ',
+  },
+  {
     icon = '  ',
     desc = 'Open Dotfiles                           ',
     action = ':e ~/.dotfiles',
     shortcut = '<Leader> e v',
-  },
-  {
-    icon = '  ',
-    desc = 'New file                                ',
-    action = 'enew',
-    shortcut = 'e           ',
   },
   {
     icon = '  ',
