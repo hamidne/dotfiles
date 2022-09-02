@@ -4,8 +4,8 @@ if not exists then
 end
 
 onenord.setup({
-	borders = false, -- Split window borders
-	fade_nc = true, -- Fade non-current windows, making them more distinguishable
+	borders = true, -- Split window borders
+	fade_nc = false, -- Fade non-current windows, making them more distinguishable
 	-- Style that is applied to various groups: see `highlight-args` for options
 	styles = {
 	  comments = "NONE",
