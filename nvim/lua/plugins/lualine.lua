@@ -11,10 +11,7 @@ lualine.setup {
     theme = 'auto',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
-    disabled_filetypes = {
-      statusline = {},
-      winbar = {},
-    },
+    disabled_filetypes = {},
     ignore_focus = {},
     always_divide_middle = true,
     globalstatus = false,
@@ -25,7 +22,7 @@ lualine.setup {
     }
   },
   sections = {
-    lualine_a = { 'mode' },
+    lualine_a = { { 'mode', padding = 1 } },
     lualine_b = { { 'branch', icon = git_icons.logo }, 'diff' },
     lualine_c = { 'filename' },
     lualine_x = { 'encoding', 'fileformat', 'filetype' },
@@ -43,5 +40,5 @@ lualine.setup {
   tabline = {},
   winbar = {},
   inactive_winbar = {},
-  extensions = {}
+  extensions = { 'nvim-tree' }
 }

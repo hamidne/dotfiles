@@ -41,7 +41,7 @@ bufferline.setup {
 
 				return splits[#splits]
 			end,
-			padding = 0,
+			padding = 1,
 		}},
 
 		color_icons = true,
