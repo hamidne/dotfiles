@@ -1,9 +1,7 @@
 [init]
 	defaultBranch = main
 [user]
-	email = mohammadne@mail.ru
-	name = mohammadne
+	email = hamidne@mail.ru
+	name = HamidNE
 [pull]
 	rebase = true
-[url "ssh://git@gitlab.snapp.ir/"]
-	insteadof = https://gitlab.snapp.ir/
