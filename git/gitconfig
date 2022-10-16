@@ -1,7 +1,13 @@
-[init]
-	defaultBranch = main
 [user]
-	email = hamidne@mail.ru
 	name = HamidNE
+	email = hamidne@mail.ru
+[alias]
+	co = checkout
+[core]
+	autocrlf = false
+[init]
+	defaultbranch = main
 [pull]
-	rebase = true
+	rebase = false
+[commit]
+	gpgsign = true
